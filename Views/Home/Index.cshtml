@@ -1,0 +1,56 @@
+@{
+  ViewBag.Title = "Home Page";
+}
+
+<script id="linkCol" type="text/x-template">
+  <div class="orderTemplate">
+    <a href="#">${OrderID}</a>
+  </div>
+</script>
+
+<script>
+  
+  function load(args) {
+    this.element.addEventListener('mousedown', function (e) {
+      if (e.target.parentElement.classList.contains('orderTemplate')) {
+        var instance = this.ej2_instances[0];
+        if (instance.isEdit)
+          instance.endEdit();
+        var index = parseInt(e.target.closest('.e-rowcell').getAttribute('index'));
+        instance.selectRow(index);
+        instance.startEdit();
+      };
+    });
+  }
+</script>
+@{
+  var edit = new Syncfusion.EJ2.Grids.GridEditSettings()
+  {
+    AllowAdding = true,
+    AllowEditing = true,
+    AllowDeleting = true,
+    Mode = Syncfusion.EJ2.Grids.EditMode.Dialog
+  };
+  var ChildGrid = new Syncfusion.EJ2.Grids.Grid()
+  {
+    DataSource = (IEnumerable<object>)ViewBag.DataSource,
+    QueryString = "EmployeeID",
+    EditSettings = edit,
+    Load = "load",
+    Columns = new List<Syncfusion.EJ2.Grids.GridColumn>
+         {
+              new Syncfusion.EJ2.Grids.GridColumn(){ Field="OrderID", HeaderText="Order ID", Width="120", Template="#linkCol", IsPrimaryKey = true },
+              new Syncfusion.EJ2.Grids.GridColumn(){ Field="Freight", HeaderText="Freight", Width="120", Format="C2" },
+              new Syncfusion.EJ2.Grids.GridColumn(){ Field="ShipName", HeaderText="Ship Name", Width="150" },
+              new Syncfusion.EJ2.Grids.GridColumn(){ Field="ShipCity", HeaderText="Ship City", Width="120" },
+         }
+  };
+}
+
+@Html.EJS().Grid("parentgrid").DataSource((IEnumerable<object>)ViewBag.Employees).Columns(col =>
+{
+   col.Field("EmployeeID").HeaderText("Employee ID").Width("125").TextAlign(Syncfusion.EJ2.Grids.TextAlign.Right).Add();
+   col.Field("Name").HeaderText("Name").Width("125").Add();
+   col.Field("Title").HeaderText("Title").Width("180").Add();
+   col.Field("City").HeaderText("City").Width("135").Add();
+}).AllowSorting().ChildGrid(ChildGrid).Render()
