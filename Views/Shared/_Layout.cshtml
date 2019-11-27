@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - EssentialJS2MvcApplication1</title>
+    @Styles.Render("~/Content/css")
+
+
+
+    <!-- Essential JS 2 material theme -->
+    <link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet" type="text/css" />
+
+    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+    
+</head>
+
+<body>
+
+            @RenderBody()
+        @RenderSection("scripts", required: false)
+        @Html.EJS().ScriptManager()
+
+</body>
+</html>
